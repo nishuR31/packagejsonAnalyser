@@ -1,0 +1,28 @@
+{
+  "name": "jokeapi",
+  "version": "1.0.0",
+  "description": "joke rest api",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "npx nodemon src/index.js",
+    "start": "node src/config/app.js",
+    "dev0": "node --watch src/config/app.js"
+  },
+  "author": "nishan nishant",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^17.0.0",
+    "express": "^5.1.0",
+    "express-rate-limit": "^7.5.1",
+    "helmet": "^8.1.0",
+    "mongoose": "^8.16.1",
+    "prettier": "^3.6.2",
+    "serve-favicon": "^2.5.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  }
+}
