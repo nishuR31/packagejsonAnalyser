@@ -1,13 +1,23 @@
 import express from "express";
 
-import getJokes from "../controllers/getJokes.js";
-import getTags from "../controllers/getTags.js";
-import deleteJoke from "../controllers/deleteJoke.js";
-import newJoke from "../controllers/newJoke.js";
-import editJoke from "../controllers/editJoke.js";
-import paginate from "../controllers/paginate.js";
-import jokeId from "../controllers/jokeId.js";
-import getJoke from "../controllers/getJoke.js";
+// import getJokes from "../controllers/getJokes.js";
+// import getTags from "../controllers/getTags.js";
+// import deleteJoke from "../controllers/deleteJoke.js";
+// import newJoke from "../controllers/newJoke.js";
+// import editJoke from "../controllers/editJoke.js";
+// import paginate from "../controllers/paginate.js";
+// import jokeId from "../controllers/jokeId.js";
+// import getJoke from "../controllers/getJoke.js";
+import {
+  getJokes,
+  getTags,
+  getJoke,
+  jokeId,
+  editJoke,
+  newJoke,
+  deleteJoke,
+  paginate,
+} from "../controllers/joke.controller.js";
 let jokeRouter = express.Router();
 
 jokeRouter.get(

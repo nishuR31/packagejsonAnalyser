@@ -6,8 +6,14 @@ let logger = (req, res, next) => {
     time: new Date().toLocaleString(),
     param: req.params,
     query: req.query,
-    rateLimit: res.req.rateLimit,
-    ms: res.getHeader("X-Response-Time") || "N/A", // use header if response time tracking is enabled
+    rateLimit: {
+      limit: res.req.rateLimit.limit,
+      used: res.req.rateLimit.used,
+      remaining: res.req.rateLimit.remaining,
+      reset: (res.req.rateLimit.resetTime = new Date(
+        res.req.rateLimit.resetTime
+      ).toLocaleString()),
+    },
   });
   next();
 };

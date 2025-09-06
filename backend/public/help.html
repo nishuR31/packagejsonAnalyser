@@ -1,15 +1,13 @@
-
- import express
-
-
-let helpRouter= asyncHandler(async (req, res) => {
-    return res.status(codes.ok).send(`<!doctype html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Joke API Helper</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.4.17/dist/tailwind.min.css" rel="stylesheet"> -->
+
+    <link rel="icon" href="./favicon.ico" />
   </head>
   <body
     class="bg-gradient-to-tl from-black via-gray-700 to-black text-white min-h-screen p-4 sm:p-6"
@@ -34,12 +32,24 @@ let helpRouter= asyncHandler(async (req, res) => {
           Homepage Route
         </h2>
         <p class="text-gray-300">
-          <span class="font-semibold">Home page:</span>
+          <span class="font-semibold">Home page with base route:</span>
           <a
             href="/api/v1"
             class="inline-block ml-2 bg-gradient-to-r from-transparent via-[#ffffff44] px-3 to-transparent px-3 py-1 rounded shadow hover:shadow-white/20 transition"
           >
             <code>/api/v1</code>
+          </a>
+          – Shows welcome or API root page.
+        </p>
+
+        <br />
+        <p class="text-gray-300">
+          <span class="font-semibold">Home page:</span>
+          <a
+            href="/"
+            class="inline-block ml-2 bg-gradient-to-r from-transparent via-[#ffffff44] px-3 to-transparent px-3 py-1 rounded shadow hover:shadow-white/20 transition"
+          >
+            <code>/</code>
           </a>
           – Shows welcome or API root page.
         </p>
@@ -54,56 +64,65 @@ let helpRouter= asyncHandler(async (req, res) => {
           <div>
             <span>- Get a joke by tags</span> • <strong>GET</strong>:
             <a
-              href="/joke-api/joke?tags=tag1&tags=tag2"
+              href="${baseRoute}/joke?tags=tag1&tags=tag2"
               class="inline-block ml-2 bg-gradient-to-r from-transparent via-[#ffffff44] px-3 to-transparent px-3 py-1 rounded shadow hover:shadow-white/20 transition"
             >
-              /joke-api/joke?tags=tag1&amp;tags=tag2
+              ${baseRoute}/joke?tags=tag1&amp;tags=tag2
             </a>
           </div>
           <div>
             <span>- Get all jokes with optional tags</span> •
             <strong>GET</strong>:
             <a
-              href="/joke-api/jokes?tags=tag1&tagNames=tag2"
+              href="${baseRoute}/jokes?tags=tag1&tagNames=tag2"
               class="inline-block ml-2 bg-gradient-to-r from-transparent via-[#ffffff44] px-3 to-transparent px-3 py-1 rounded shadow hover:shadow-white/20 transition"
             >
-              /joke-api/jokes?tags=tag1&amp;tagNames=tag2
+              ${baseRoute}/jokes?tags=tag1&amp;tagNames=tag2
+            </a>
+          </div>
+          <div>
+            <span>- Get all tags</span> • <strong>GET</strong>:
+            <a
+              href="${baseRoute}/tags"
+              class="inline-block ml-2 bg-gradient-to-r from-transparent via-[#ffffff44] px-3 to-transparent px-3 py-1 rounded shadow hover:shadow-white/20 transition"
+            >
+              ${baseRoute}/tags
             </a>
           </div>
           <div>
             <span>- Get joke by ID</span> • <strong>GET</strong>:
             <a
-              href="/joke-api/:id"
+              href="${baseRoute}/:id"
               class="inline-block ml-2 bg-gradient-to-r from-transparent via-[#ffffff44] px-3 to-transparent px-3 py-1 rounded shadow hover:shadow-white/20 transition"
             >
-              /joke-api/:id
+              ${baseRoute}/:id
             </a>
           </div>
           <div>
             <span>- Submit a new joke</span> • <strong>POST</strong>:
             <a
-              href="/joke-api/joke"
+              href="${baseRoute}/joke"
               class="inline-block ml-2 bg-gradient-to-r from-transparent via-[#ffffff44] px-3 to-transparent px-3 py-1 rounded shadow hover:shadow-white/20 transition"
             >
-              /joke-api/joke
+              ${baseRoute}/joke
             </a>
           </div>
           <div>
             <span>- Delete a joke by ID</span> • <strong>DELETE</strong>:
             <a
-              href="/joke-api/:id/delete"
+              href="${baseRoute}/:id/delete"
               class="inline-block ml-2 bg-gradient-to-r from-transparent via-[#ffffff44] px-3 to-transparent px-3 py-1 rounded shadow hover:shadow-white/20 transition"
             >
-              /joke-api/:id/delete
+              ${baseRoute}/:id/delete
             </a>
           </div>
           <div>
             <span>- Edit a joke by ID</span> • <strong>PUT</strong>:
             <a
-              href="/joke-api/:id/edit"
+              href="${baseRoute}/:id/edit"
               class="inline-block ml-2 bg-gradient-to-r from-transparent via-[#ffffff44] px-3 to-transparent px-3 py-1 rounded shadow hover:shadow-white/20 transition"
             >
-              /joke-api/:id/edit
+              ${baseRoute}/:id/edit
             </a>
           </div>
         </div>
@@ -138,7 +157,7 @@ let helpRouter= asyncHandler(async (req, res) => {
         <pre
           class="inline-block ml-2 bg-gradient-to-r from-transparent via-[#ffffff44] p-3 to-transparent rounded shadow hover:shadow-white/20 transition border-none rounded p-4 text-sm overflow-x-auto text-gray-100"
         >
-        <code>GET /joke-api/jokes?page=2&limit=10</code></pre>
+        <code>GET ${baseRoute}/jokes?page=2&limit=10</code></pre>
         <p class="text-gray-400 mt-2">
           This returns the second page of jokes with 10 items per page.
         </p>
@@ -151,7 +170,3 @@ let helpRouter= asyncHandler(async (req, res) => {
     </div>
   </body>
 </html>
-`);
-  })
-
-export default helpRouter;

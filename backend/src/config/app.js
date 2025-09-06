@@ -1,11 +1,15 @@
 import express from "express";
 import cors from "cors";
+import cookie from "cookie-parser";
+import morgan from "morgan";
+import helmet from "helmet";
 import expressLimit from "express-rate-limit";
 import logger from "../utils/logger.js";
-import jokeApiRoute from "../routes/joke.route.js";
 import ApiErrorResponse from "../utils/apiErrorResponse.js";
-import codes from "../constants/statusCodes.js";
-import helpRoute from "../routes/help.route.js";
+import ApiResponse from "../utils/apiResponse.js";
+import codes from "../utils/statusCodes.js";
+import jokeRouter from "../routers/joke.router.js";
+import userRouter from "../routers/user.router.js";
 
 const baseRoute = "/api/v1";
 
@@ -18,22 +22,28 @@ let limit = expressLimit({
 let app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(limit);
-app.use(cors());
-app.use(logger); 
+// app.use(limit);
+app.use(cors({ origin: "*" }));
+app.use(logger);
+app.use(cookie());
+// app.use(helmet());
+app.use(morgan("dev"));
+app.use(express.static("public"));
 
+app.use(`${baseRoute}/j`, jokeRouter);
+app.use(`${baseRoute}/u`, userRouter);
 
-app.get(baseRoute, (req, res) => {
-  res.send("Server from base route fired up");
+app.use("/", (req, res) => {
+  res.status(codes.ok).json(new ApiResponse("Server fired up", codes.ok).res());
+});
+app.all("/*splat", (req, res) => {
+  res.status(codes.notFound).json(
+    new ApiResponse("Route not found", codes.notFound, {
+      route: req.path,
+    }).res()
+  );
 });
 
-app.use(baseRoute, jokeApiRoute);
-app.use(baseRoute, helpRoute);
-
-
-app.use("/", (req,res)=>{
-  res.send("Server fired up");
-});
 app.use((err, req, res, next) => {
   return res
     .status(codes.badRequest)
@@ -47,4 +57,4 @@ app.use((err, req, res, next) => {
     );
 });
 
-export default app;  
+export default app;

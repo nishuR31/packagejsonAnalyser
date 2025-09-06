@@ -1,4 +1,4 @@
-import codes from "../constants/statusCodes.js";
+import codes from "./statusCodes.js";
 
 export default class ApiResponse {
   constructor(
@@ -14,13 +14,13 @@ export default class ApiResponse {
       Error.captureStackTrace(this, this.constructor);
   }
 
-  res(dev = true) {
+  res() {
     return {
       message: this.message,
       name: this.name,
       payload: this.payload,
       code: this.code,
-      ...(dev && { stack: this.stack }),
+      ...(!!parseInt(process.env.DEV) && { stack: this.stack }),
     };
   }
 }
