@@ -1,6 +1,6 @@
-import ApiResponse from "../utils/apiResponse";
-import asyncHandler from "../utils/asyncHandler";
-import codes from "../utils/statusCodes";
+import ApiResponse from "../utils/apiResponse.js";
+import asyncHandler from "../utils/asyncHandler.js";
+import codes from "../utils/statusCodes.js";
 let health = asyncHandler(async (req, res) => {
   res
     .status(codes.ok)

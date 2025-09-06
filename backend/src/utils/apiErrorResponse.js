@@ -11,6 +11,8 @@ export default class ApiErrorResponse extends Error {
     this.name = this.constructor.name;
     this.payload = payload;
     this.code = code;
+    this.success = false;
+
     if (Error.captureStackTrace)
       Error.captureStackTrace(this, this.constructor);
   }
@@ -19,6 +21,8 @@ export default class ApiErrorResponse extends Error {
     return {
       message: this.message,
       name: this.name,
+      success: this.success,
+
       payload: this.payload,
       code: this.code,
       ...(!!parseInt(process.env.DEV) && { stack: this.stack }),

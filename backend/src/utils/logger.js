@@ -6,14 +6,14 @@ let logger = (req, res, next) => {
     time: new Date().toLocaleString(),
     param: req.params,
     query: req.query,
-    rateLimit: {
-      limit: res.req.rateLimit.limit,
-      used: res.req.rateLimit.used,
-      remaining: res.req.rateLimit.remaining,
-      reset: (res.req.rateLimit.resetTime = new Date(
-        res.req.rateLimit.resetTime
-      ).toLocaleString()),
-    },
+    // rateLimit: {
+    //   limit: res.req.rateLimit.limit,
+    //   used: res.req.rateLimit.used,
+    //   remaining: res.req.rateLimit.remaining,
+    //   reset: (res.req.rateLimit.resetTime = new Date(
+    //     res.req.rateLimit.resetTime
+    //   ).toLocaleString()),
+    // },
   });
   next();
 };

@@ -4,13 +4,14 @@ configDotenv();
 import app from "./src/config/app.js";
 import connect from "./src/config/mongoDB.js";
 import redis from "./src/config/redis.js";
-
+import cronJob from "./src/controllers/cron.controller.js";
 const port = process.env.PORT || 4000;
 
 async function fireUp() {
   await connect();
   await redis();
   app.listen(port, () => {
+    cronJob();
     console.log(`Server is warming up at: http://localhost:${port}`);
   });
 }

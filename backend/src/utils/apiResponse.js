@@ -9,6 +9,7 @@ export default class ApiResponse {
     this.message = message;
     this.name = this.constructor.name;
     this.payload = payload;
+    this.success = true;
     this.code = code;
     if (Error.captureStackTrace)
       Error.captureStackTrace(this, this.constructor);
@@ -18,6 +19,8 @@ export default class ApiResponse {
     return {
       message: this.message,
       name: this.name,
+      success: this.success,
+
       payload: this.payload,
       code: this.code,
       ...(!!parseInt(process.env.DEV) && { stack: this.stack }),
