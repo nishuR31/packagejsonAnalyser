@@ -76,7 +76,7 @@ let auth = (need = true) =>
 
     let user = await User.findById(decodedAccess._id);
 
-    let payload = { userName: user.userName, _id: user._id };
+    let payload = { userName: user.userName, _id: user._id, role: user.role };
 
     req.user = payload;
     next();

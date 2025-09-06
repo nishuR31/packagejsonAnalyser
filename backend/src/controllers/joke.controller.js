@@ -6,14 +6,21 @@ import asyncHandler from "../utils/asyncHandler.js";
 import isEmpty from "../utils/isEmpty.js";
 import mongoose from "mongoose";
 import { red } from "../config/redis.js";
-import { json } from "express";
 //////////////////////////////////////////////////////////////
-
-
-
 
 export let deleteJoke = asyncHandler(async (req, res) => {
   const id = req.params.id;
+  let exist = JSON.parse(await red.hGet(`user:${process.env.KEY}`, "login"));
+  if (exist && !exist.role.inclues("admin")) {
+    return res
+      .status(codes.unauthorized)
+      .json(
+        new ApiErrorResponse(
+          "Not authorized to delete joke",
+          codes.unauthorized
+        ).res()
+      );
+  }
 
   // Optional: Validate ObjectId format
   if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -40,10 +47,21 @@ export let deleteJoke = asyncHandler(async (req, res) => {
   );
 });
 
-
 ///////////////////////////////////////////////
 
 export let editJoke = asyncHandler(async (req, res) => {
+  let exist = JSON.parse(await red.hGet(`user:${process.env.KEY}`, "login"));
+  if (exist && !exist.role.inclues("admin")) {
+    return res
+      .status(codes.unauthorized)
+      .json(
+        new ApiErrorResponse(
+          "Not authorized to edit joke",
+          codes.unauthorized
+        ).res()
+      );
+  }
+
   let body = req.body;
   let id = req.params.id;
   let { joke, tags, rating } = body;
@@ -76,13 +94,12 @@ export let editJoke = asyncHandler(async (req, res) => {
   }
   return res.status(codes.ok).json(
     new ApiResponse("joke successfully update", codes.ok, {
-      "joke": updatedJoke.joke,
+      joke: updatedJoke.joke,
     }).res()
   );
 });
 
 //////////////////////////////////////////////////////////
-
 
 export let getJoke = asyncHandler(async (req, res) => {
   let tags = req.query.tags;
@@ -119,47 +136,47 @@ export let getJoke = asyncHandler(async (req, res) => {
   );
 });
 
-
 ////////////////////////////////////////////////////////////////
 
-export let getJokes=asyncHandler(async (req, res) => {
-    let tags = req.query.tags;
-    if (!tags) {
-      return res
-        .status(codes.notFound)
-        .json(new ApiErrorResponse("No tags provided", codes.notFound).res());
-    }
+export let getJokes = asyncHandler(async (req, res) => {
+  let tags = req.query.tags;
+  if (!tags) {
+    return res
+      .status(codes.notFound)
+      .json(new ApiErrorResponse("No tags provided", codes.notFound).res());
+  }
 
-    let tagList = Array.isArray(tags) ? tags : tags ? [tags] : [];
+  let tagList =
+    Array.isArray(tags) ? tags
+    : tags ? [tags]
+    : [];
 
-    if (isEmpty(tagList)) {
-      return res
-        .status(codes.badRequest)
-        .json(new ApiErrorResponse("Tag is empty", codes.badRequest).res());
-    }
-    let jokes = await Joke.aggregate([
-      { $match: { tags: { $in: tagList } } },
-      { $project: { __v: 0, createdAt: 0, updatedAt: 0 } },
-    ]);
-    if (!jokes || isEmpty([jokes])) {
-      return res
-        .status(codes.notFound)
-        .json(new ApiErrorResponse("Joke not found", codes.notFound).res());
-    }
+  if (isEmpty(tagList)) {
+    return res
+      .status(codes.badRequest)
+      .json(new ApiErrorResponse("Tag is empty", codes.badRequest).res());
+  }
+  let jokes = await Joke.aggregate([
+    { $match: { tags: { $in: tagList } } },
+    { $project: { __v: 0, createdAt: 0, updatedAt: 0 } },
+  ]);
+  if (!jokes || isEmpty([jokes])) {
+    return res
+      .status(codes.notFound)
+      .json(new ApiErrorResponse("Joke not found", codes.notFound).res());
+  }
 
-    return res.status(codes.ok).json(
-      new ApiResponse("Joke fetched successfully", codes.ok, {
-        jokes: jokes,
-      }).res()
-    );
-  })
+  return res.status(codes.ok).json(
+    new ApiResponse("Joke fetched successfully", codes.ok, {
+      jokes: jokes,
+    }).res()
+  );
+});
 
-
-
-  /////////////////////////////////////////////////
+/////////////////////////////////////////////////
 
 export let getTags = asyncHandler(async (req, res) => {
-  let exist = JSON.stringify(await red.hGet("joke:1", "tags"));
+  let exist = JSON.stringify(await red.hGet(`joke:${process.env.KEY}`, "tags"));
   if (exist) {
     return res.status(codes.ok).json(
       new ApiResponse("Tags are found successfully", codes.ok, {
@@ -179,7 +196,7 @@ export let getTags = asyncHandler(async (req, res) => {
       .status(codes.notFound)
       .json(new ApiErrorResponse("Tags are not found", codes.notFound).res());
   }
-  await red.hSet("joke:1", "tags", JSON.stringify(tags));
+  await red.hSet(`joke:${process.env.KEY}`, "tags", JSON.stringify(tags));
   return res.status(codes.ok).json(
     new ApiResponse("Tags are found successfully", codes.ok, {
       tags: tags,
@@ -187,10 +204,7 @@ export let getTags = asyncHandler(async (req, res) => {
   );
 });
 
-
-
 //////////////////////////////////////////////////////////////
-
 
 export let jokeId = asyncHandler(async (req, res) => {
   let id = req.params.id;
@@ -222,12 +236,11 @@ export let jokeId = asyncHandler(async (req, res) => {
   );
 });
 
-
 ///////////////////////////////////////////////
 
 export let paginate = asyncHandler(async (req, res) => {
   let page = parseInt(req.query.page) || 1;
-  let limit = parseInt(req.query.limit);
+  let limit = parseInt(req.query.limit) || 10;
   let size = (page - 1) * limit;
   let jokes = await Joke.aggregate([
     { $skip: size },
@@ -274,9 +287,7 @@ export let paginate = asyncHandler(async (req, res) => {
   );
 });
 
-
 //////////////////////////////////////////////
-
 
 export let newJoke = asyncHandler(async (req, res) => {
   let body = req.body;
@@ -286,7 +297,10 @@ export let newJoke = asyncHandler(async (req, res) => {
     return res
       .status(codes.badRequest)
       .json(
-        new ApiErrorResponse("Joke and tags are required.", codes.badRequest).res()
+        new ApiErrorResponse(
+          "Joke and tags are required.",
+          codes.badRequest
+        ).res()
       );
   }
 

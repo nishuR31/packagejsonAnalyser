@@ -3,6 +3,7 @@ let logger = (req, res, next) => {
     method: req.method,
     secure: req.secure,
     url: req.host + req.url,
+    original: req.host + req.originalUrl,
     time: new Date().toLocaleString(),
     param: req.params,
     query: req.query,

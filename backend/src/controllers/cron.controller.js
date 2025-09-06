@@ -29,13 +29,15 @@ import axios from "axios";
 
 export default async function cronJob() {
   try {
-    cron.schedule("*/5 * * * *", async () => {
+    cron.schedule(" 5 * * * *", async () => {
       try {
         let res = await axios.get("http://localhost:3000/api/v1/health");
-        console.log(`Cron done ran, successfully checked health`);
-        console.table(res.data);
+        if (res.data.success) {
+          console.log(`Cron done ran, successfully checked health`);
+          console.table(res.data);
+        }
       } catch (err) {
-        console.log(`Cron failed checking health`);
+        console.error(`Cron failed checking health:${err}`);
       }
     });
   } catch (err) {
