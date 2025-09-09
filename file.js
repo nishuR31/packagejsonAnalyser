@@ -1,7 +1,11 @@
 import fs from "fs/promises";
+import { fileURLToPath } from "url";
+import path from "path";
 
 async function analyzeScripts() {
   let json, data;
+  let paths = path.dirname(fileURLToPath(import.meta.url));
+  let packagePath = path.resolve(paths, "../package.json");
   let keys = [
     // Basic info
     "name",
@@ -40,11 +44,11 @@ async function analyzeScripts() {
   ];
 
   try {
-    const data = await fs.readFile("package.json", "utf-8");
+    const data = await fs.readFile(packagePath, "utf-8");
     console.log(`\nFile has been read successfully`);
     json = JSON.parse(data);
   } catch (err) {
-    console.error(`\nError reading or parsing file: ${err}`);
+    console.error(`\nError finding, reading or parsing file: ${err.message}`);
     return; // stop execution if file not found / invalid
   }
 
@@ -53,27 +57,26 @@ async function analyzeScripts() {
       Object.keys(json.scripts).length === 1 &&
       Object.keys(json.scripts).every((key) => key === "test");
 
-    data =
-      onlyTest ?
-        {
+    data = onlyTest
+      ? {
           scripts: json.scripts,
           warn:
-            json.scripts.test === `echo "Error: no test specified" && exit 1` ?
-              "Default npm init test script found.\n"
-            : "Only test script found..\n",
+            json.scripts.test === `echo "Error: no test specified" && exit 1`
+              ? "Default npm init test script found.\n"
+              : "Only test script found..\n",
         }
       : {
           scripts: json.scripts,
           warn: "Kindly check for correct commands..\n",
         };
   }
-  json.author && console.log(`\nAuthor : ${json.author}`);
+  json.author.length && console.log(`\nAuthor : ${json.author}`);
   json.main && console.log(`\nMain : ${json.main}`);
   json.repository &&
     console.log(`Repository : ${json.repository.url}(${json.repository.type})`);
   json.bugs && console.log(`Bugs : ${json.bugs.url}`);
   json.homepage && console.log(`Homepage : ${json.homepage.url}`);
-  json.keywords && console.log(`Keywords : ${json.keywords.join(" ")}`);
+  json.keywords.length && console.log(`Keywords : ${json.keywords.join(" ")}`);
   console.log(`Version : ${json.version}`);
   json.description && console.log(`Description : ${json.description}`);
   json.type && console.log(`Type : ${json.type}\n`);
@@ -110,7 +113,9 @@ async function analyzeScripts() {
 
   reqKey &&
     console.log(
-      `\nRecommended options for a better package.json : ${reqKey.map((e) => `\n${e}`)}`
+      `\nRecommended options for a better package.json : ${reqKey.map(
+        (e) => `\n${e}`
+      )}`
     );
 }
 
