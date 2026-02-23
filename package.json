@@ -1,5 +1,5 @@
 {
-  "name": "packagejson-analyser",
+  "name": "pkgjson",
   "version": "4.3.2",
   "type": "module",
   "bin": {
@@ -10,7 +10,10 @@
   "scripts": {
     "test": "echo \"No test specified\""
   },
-  "repository": {},
+  "repository": {
+    "url": "https://github.com/nishur31/pkgjson",
+    "type": "git"
+  },
   "bugs": {},
   "homepage": "",
   "engines": {},
