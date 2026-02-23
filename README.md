@@ -1,4 +1,4 @@
-# packagejson-analyser
+# PackageJSON Rater and Upgrader
 
 A robust, interactive CLI tool to analyze and upgrade your `package.json` files. No external dependencies required.
 
@@ -16,7 +16,7 @@ A robust, interactive CLI tool to analyze and upgrade your `package.json` files.
 2. Run the analyzer:
 
 ```sh
-node index.js
+npx pkgjson
 ```
 
 3. The CLI will:
