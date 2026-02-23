@@ -1,100 +1,56 @@
+# packagejson-analyser
 
-# Package.json Analyzer
-
-[![Node.js](https://img.shields.io/badge/Node%20>=18-green?logo=node.js&logoColor=black&style=flat)](https://nodejs.org)
-[![Status](https://img.shields.io/badge/status--active-success.svg?logoColor=black&logo=node.js&style=flat)]()
-[![Made With](https://img.shields.io/badge/made%20with%20JavaScript-yellow?logo=javascript&logoColor=black&style=flat)]()
-
-A simple **standalone script** to analyze your project’s `package.json`.
-It checks for missing keys, evaluates scripts, lists dependencies, and gives suggestions for making your `package.json` more professional.
-
----
+A robust, interactive CLI tool to analyze and upgrade your `package.json` files. No external dependencies required.
 
 ## Features
 
-* Reads the **parent folder’s `package.json`** automatically
-* Validates and prints:
+- **Completeness Rating:** Rates your `package.json` before and after upgrade.
+- **Missing Fields Detection:** Lists all recommended fields missing from your `package.json`.
+- **Interactive Upgrade:** Prompts you to add missing fields, with the option to provide a value or leave empty (empty fields are still added for completeness).
+- **Summary Output:** Shows a summary of your package, including scripts and key metadata.
+- **No External Libraries:** Uses only Node.js built-in modules (`readline`, `fs/promises`).
 
-  * Basic metadata (`name`, `version`, `author`, etc.)
-  * Repository / homepage / bugs links
-  * Scripts (warns if only default `test` script exists)
-  * Dependencies, devDependencies, peer & optional dependencies
-* Suggests missing keys that are recommended for npm/GitHub projects
+## Usage
 
----
+1. Place the CLI script (`index.js`) and your `package.json` in the same directory.
+2. Run the analyzer:
 
-## Installation
-
-This is not an npm package. Clone and run directly:
-
-```bash
-git clone https://github.com/nishuR31/packagejsonAnalyser.git
-cd packagejsonAnalyser
+```sh
+node index.js
 ```
 
-Since the script analyzes the **parent folder’s package.json**, keep this repo inside your project root like:
+3. The CLI will:
+   - Rate your current `package.json` completeness.
+   - List missing recommended fields.
+   - Ask if you want to upgrade by adding missing fields.
+   - Prompt for each missing field (default is empty if you skip).
+   - Save the upgraded `package.json` and show the new completeness rating and summary.
 
-```
-my-project/
-  ├── package.json   <- gets analyzed
-  ├── packagejsonAnalyser/
-  │     └── file.js
-  └── src/
-```
-
----
-
-##  Usage
-
-Run the analyzer with Node:
-
-```bash
-node file.js
-```
-
-### Example output:
+## Example Output
 
 ```
 File has been read successfully
-
-Author : nishan nishant
-Main : server.js
-Repository : git (github.com/nishuR31/packagejsonAnalyser)
-
-Dependencies used:
-┌─────────┬────────────┐
-│ express │ ^5.1.0     │
-│ mongoose│ ^8.16.1    │
-└─────────┴────────────┘
-
-Script commands :
-npm run dev
-npm start
-npm test (Default npm init test script)
-
-Recommended options for a better package.json :
-repository
-keywords
-homepage
-contributors
+Current completeness: 40%
+Missing fields: version, description, author, ...
+Do you want to upgrade? (y/n): y
+Enter value for version (default empty): 1.0.0
+Enter value for description (default empty):
+...
+Upgrade complete!
+New completeness: 100%
+Summary:
+  Author: ...
+  Main: ...
+  Scripts: ...
+  ...
 ```
 
----
+## Notes
 
-## Requirements
-
-* [Node.js](https://nodejs.org) v18+
-* A `package.json` in the parent directory
-
----
-
-## Recommended Next Steps
-
-* Add missing keys like `repository`, `keywords`, `homepage`, `contributors`
-* Replace the default test script with a real test runner (`jest`, `mocha`, etc.)
-
----
+- If you skip a field, it will be added with an empty value.
+- No external dependencies are used.
+- Designed for Node.js 16+.
 
 ## License
 
-This project is [licensed](LICENSE) under the **MIT License**.
+MIT
