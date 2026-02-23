@@ -1,0 +1,19 @@
+{
+  "name": "packagejson-analyser",
+  "version": "4.3.2",
+  "type": "module",
+  "bin": {
+    "pkgjson": "./bin/cli.js"
+  },
+  "license": "MIT",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"No test specified\""
+  },
+  "repository": {},
+  "bugs": {},
+  "homepage": "",
+  "engines": {},
+  "contributors": [],
+  "files": []
+}
