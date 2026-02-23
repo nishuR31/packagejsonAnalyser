@@ -1,6 +1,6 @@
 {
   "name": "pkgenhance",
-  "version": "4.4.0",
+  "version": "4.4.4",
   "type": "module",
   "bin": {
     "pkgjson": "./bin/cli.js"
