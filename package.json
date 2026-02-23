@@ -1,5 +1,5 @@
 {
-  "name": "pkgupgrade",
+  "name": "pkgenhance",
   "version": "4.3.2",
   "type": "module",
   "bin": {
@@ -11,7 +11,7 @@
     "test": "echo \"No test specified\""
   },
   "repository": {
-    "url": "https://github.com/nishur31/pkgupgrade",
+    "url": "https://github.com/nishur31/pkgenhance",
     "type": "git"
   },
   "bugs": {},
